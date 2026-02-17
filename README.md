@@ -7,17 +7,17 @@ A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily an
 ### Individual instance pricing
 
 ```
-https://csaller.github.io/ec2-pricing/{region}/{family}/{size}.json
+https://ec2pricing.com/{region}/{family}/{size}.json
 ```
 
 **Examples:**
 
 ```bash
 # Get t3a.medium pricing in us-east-1
-curl https://csaller.github.io/ec2-pricing/us-east-1/t3a/medium.json
+curl https://ec2pricing.com/us-east-1/t3a/medium.json
 
 # Get c7g.2xlarge pricing in eu-west-1
-curl https://csaller.github.io/ec2-pricing/eu-west-1/c7g/2xlarge.json
+curl https://ec2pricing.com/eu-west-1/c7g/2xlarge.json
 ```
 
 **Response format:**
@@ -38,7 +38,7 @@ curl https://csaller.github.io/ec2-pricing/eu-west-1/c7g/2xlarge.json
 ### Family summaries
 
 ```
-https://csaller.github.io/ec2-pricing/{region}/{family}.json
+https://ec2pricing.com/{region}/{family}.json
 ```
 
 Get all instances in a family, sorted by price.
@@ -47,10 +47,10 @@ Get all instances in a family, sorted by price.
 
 ```bash
 # Get all t3a instances in us-east-1
-curl https://csaller.github.io/ec2-pricing/us-east-1/t3a.json
+curl https://ec2pricing.com/us-east-1/t3a.json
 
 # Get all m7g instances in eu-west-1
-curl https://csaller.github.io/ec2-pricing/eu-west-1/m7g.json
+curl https://ec2pricing.com/eu-west-1/m7g.json
 ```
 
 **Response format:**
@@ -91,7 +91,7 @@ All `price` values are hourly On-Demand rates in USD.
 
 ```bash
 # List all regions and instance types
-curl https://csaller.github.io/ec2-pricing/index.json
+curl https://ec2pricing.com/index.json
 ```
 
 Returns a full manifest of every region and instance type:
