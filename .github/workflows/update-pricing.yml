@@ -1,0 +1,110 @@
+name: Update EC2 Pricing
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
+
+# Only allow one deployment at a time
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        region:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - af-south-1
+          - ap-east-1
+          - ap-south-2
+          - ap-southeast-3
+          - ap-southeast-5
+          - ap-southeast-4
+          - ap-south-1
+          - ap-southeast-6
+          - ap-northeast-3
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-east-2
+          - ap-southeast-7
+          - ap-northeast-1
+          - ca-central-1
+          - ca-west-1
+          - eu-central-1
+          - eu-west-1
+          - eu-west-2
+          - eu-south-1
+          - eu-west-3
+          - eu-south-2
+          - eu-north-1
+          - eu-central-2
+          - il-central-1
+          - mx-central-1
+          - me-south-1
+          - me-central-1
+          - sa-east-1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Process region ${{ matrix.region }}
+        run: bun process-region.js ${{ matrix.region }}
+
+      - name: Zip region output
+        run: cd instances && zip -r ../${{ matrix.region }}.zip ${{ matrix.region }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: region-${{ matrix.region }}
+          path: ${{ matrix.region }}.zip
+          retention-days: 1
+
+  deploy:
+    needs: process
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Extract all regions
+        run: |
+          mkdir -p site
+          for dir in artifacts/region-*; do
+            region_name="${dir#artifacts/region-}"
+            unzip "$dir/$region_name.zip" -d site/
+          done
+
+      - name: Generate index.json
+        run: bun generate-index.js site
+
+      - name: Prepare for Pages
+        run: touch site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
