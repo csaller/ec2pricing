@@ -73,6 +73,9 @@ for (const regionCode of regions) {
   // Track directories we've already created to avoid redundant mkdir calls
   const createdDirs = new Set()
 
+  // Track instances by family for summary files
+  const familyInstances = {}
+
   for (const key of Object.keys(products)) {
     const product = products[key]
     const attrs = product.attributes || {}
@@ -130,5 +133,29 @@ for (const regionCode of regions) {
     }
 
     await Bun.write(fullPath, JSON.stringify(instanceJson))
+
+    // Track this instance for the family summary
+    const familyName = instanceType.split('.')[0] // e.g., "t3a" from "t3a.medium"
+    if (!familyInstances[familyName]) {
+      familyInstances[familyName] = []
+    }
+    familyInstances[familyName].push(instanceJson)
+  }
+
+  // Write family summary files
+  for (const [familyName, instances] of Object.entries(familyInstances)) {
+    const familyJson = {
+      family: familyName,
+      region: regionCode,
+      instances: instances.sort((a, b) => {
+        // Sort by price ascending
+        const priceA = a.price || 0
+        const priceB = b.price || 0
+        return priceA - priceB
+      })
+    }
+
+    const familyPath = `${regionDir}/${familyName}.json`
+    await Bun.write(familyPath, JSON.stringify(familyJson, null, 2))
   }
 }

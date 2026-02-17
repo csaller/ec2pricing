@@ -42,6 +42,7 @@ const getPriceForSku = (sku) => {
 }
 
 const createdDirs = new Set()
+const familyInstances = {}
 let count = 0
 
 for (const key of Object.keys(products)) {
@@ -96,6 +97,32 @@ for (const key of Object.keys(products)) {
 
   await Bun.write(fullPath, JSON.stringify(instanceJson))
   count++
+
+  // Track this instance for the family summary
+  const familyName = instanceType.split('.')[0]
+  if (!familyInstances[familyName]) {
+    familyInstances[familyName] = []
+  }
+  familyInstances[familyName].push(instanceJson)
 }
 
-console.log(`Done: wrote ${count} instance files for ${regionCode}`)
+// Write family summary files
+let familyCount = 0
+for (const [familyName, instances] of Object.entries(familyInstances)) {
+  const familyJson = {
+    family: familyName,
+    region: regionCode,
+    instances: instances.sort((a, b) => {
+      // Sort by price ascending
+      const priceA = a.price || 0
+      const priceB = b.price || 0
+      return priceA - priceB
+    })
+  }
+
+  const familyPath = `${regionDir}/${familyName}.json`
+  await Bun.write(familyPath, JSON.stringify(familyJson, null, 2))
+  familyCount++
+}
+
+console.log(`Done: wrote ${count} instance files and ${familyCount} family files for ${regionCode}`)
