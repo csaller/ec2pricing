@@ -47,9 +47,13 @@ let count = 0
 for (const key of Object.keys(products)) {
   const product = products[key]
   const attrs = product.attributes || {}
-  const productFamily = attrs.productFamily || product.productFamily || null
 
+  const productFamily = attrs.productFamily || product.productFamily || null
   if (productFamily !== 'Compute Instance') continue
+
+  // Only include Linux instances
+  const os = attrs.operatingSystem || attrs['Operating System'] || ''
+  if (os !== 'Linux') continue
 
   const sku = product.sku || attrs.instancesku || attrs.instanceSku || attrs.sku
   const price = getPriceForSku(sku)
