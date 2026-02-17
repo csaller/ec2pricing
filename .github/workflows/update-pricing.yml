@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'process-region.js'
+      - 'generate-index.js'
+      - '.github/workflows/update-pricing.yml'
   schedule:
     - cron: '0 6 * * *'
 
