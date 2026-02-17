@@ -4,11 +4,13 @@ A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily an
 
 ## Live API
 
+### Individual instance pricing
+
 ```
 https://csaller.github.io/ec2-pricing/{region}/{family}/{size}.json
 ```
 
-### Examples
+**Examples:**
 
 ```bash
 # Get t3a.medium pricing in us-east-1
@@ -16,12 +18,9 @@ curl https://csaller.github.io/ec2-pricing/us-east-1/t3a/medium.json
 
 # Get c7g.2xlarge pricing in eu-west-1
 curl https://csaller.github.io/ec2-pricing/eu-west-1/c7g/2xlarge.json
-
-# List all regions and instance types
-curl https://csaller.github.io/ec2-pricing/index.json
 ```
 
-### Response format
+**Response format:**
 
 ```json
 {
@@ -32,15 +31,70 @@ curl https://csaller.github.io/ec2-pricing/index.json
   "storage": "EBS only",
   "networkPerformance": "Up to 5 Gigabit",
   "operatingSystem": "Linux",
-  "price": 0.1052
+  "price": 0.0376
 }
 ```
 
-`price` is the hourly On-Demand rate in USD.
+### Family summaries
 
-### Index
+```
+https://csaller.github.io/ec2-pricing/{region}/{family}.json
+```
 
-`/index.json` returns a full manifest of every region and instance type:
+Get all instances in a family, sorted by price.
+
+**Examples:**
+
+```bash
+# Get all t3a instances in us-east-1
+curl https://csaller.github.io/ec2-pricing/us-east-1/t3a.json
+
+# Get all m7g instances in eu-west-1
+curl https://csaller.github.io/ec2-pricing/eu-west-1/m7g.json
+```
+
+**Response format:**
+
+```json
+{
+  "family": "t3a",
+  "region": "us-east-1",
+  "instances": [
+    {
+      "instanceType": "t3a.nano",
+      "instanceFamily": "General purpose",
+      "vCPU": "2",
+      "memory": "0.5 GiB",
+      "storage": "EBS only",
+      "networkPerformance": "Up to 5 Gigabit",
+      "operatingSystem": "Linux",
+      "price": 0.0047
+    },
+    {
+      "instanceType": "t3a.micro",
+      "instanceFamily": "General purpose",
+      "vCPU": "2",
+      "memory": "1 GiB",
+      "storage": "EBS only",
+      "networkPerformance": "Up to 5 Gigabit",
+      "operatingSystem": "Linux",
+      "price": 0.0094
+    }
+    // ... all instances in family, sorted by price
+  ]
+}
+```
+
+All `price` values are hourly On-Demand rates in USD.
+
+### Master index
+
+```bash
+# List all regions and instance types
+curl https://csaller.github.io/ec2-pricing/index.json
+```
+
+Returns a full manifest of every region and instance type:
 
 ```json
 {
@@ -97,7 +151,10 @@ bun index.js
 bun process-region.js us-east-1
 ```
 
-Output is written to `instances/{region}/{family}/{size}.json`.
+Output is written to:
+
+- Individual instances: `instances/{region}/{family}/{size}.json`
+- Family summaries: `instances/{region}/{family}.json`
 
 ### Generate index
 
@@ -118,13 +175,21 @@ bun generate-index.js instances
 │   └── update-pricing.yml   # Daily CI pipeline with matrix strategy
 └── instances/               # Generated output (gitignored)
     └── {region}/
+        ├── {family}.json         # Family summary (all instances)
         └── {family}/
-            └── {size}.json
+            └── {size}.json       # Individual instance
 ```
 
 ## Data source
 
-Pricing data is fetched directly from the official [AWS EC2 Pricing API](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json). Only Linux On-Demand pricing is included.
+Pricing data is fetched directly from the official [AWS EC2 Pricing API](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json).
+
+**Filtering:**
+
+- Only **Linux On-Demand** pricing is included
+- Standard `BoxUsage` instances only (no Reserved, Savings Plans, Dedicated, or Spot)
+- Base Linux without pre-installed software (SQL, etc.)
+- No Windows, RHEL, SUSE, or other operating systems
 
 ## License
 
