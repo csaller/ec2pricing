@@ -55,11 +55,24 @@ for (const key of Object.keys(products)) {
   const os = attrs.operatingSystem || attrs['Operating System'] || ''
   if (os !== 'Linux') continue
 
+  const instanceType = attrs.instanceType || attrs['Instance Type'] || null
+  if (!instanceType) continue
+
+  // Only include standard On-Demand pricing (no Savings Plans, Reserved, Dedicated, etc.)
+  // Usage types can be "BoxUsage:instance" or "REGION-BoxUsage:instance" (e.g., "SAE1-BoxUsage:t3.micro")
+  const usageType = attrs.usagetype || attrs.usageType || ''
+  if (!usageType.endsWith(`BoxUsage:${instanceType}`)) continue
+
+  // Only include base Linux without pre-installed software (SQL, etc.)
+  const preInstalledSw = attrs.preInstalledSw || attrs['Pre Installed S/W'] || ''
+  if (preInstalledSw !== 'NA') continue
+
+  // Only include base operation (not SQL or other add-ons)
+  const operation = attrs.operation || ''
+  if (operation !== 'RunInstances') continue
+
   const sku = product.sku || attrs.instancesku || attrs.instanceSku || attrs.sku
   const price = getPriceForSku(sku)
-  const instanceType = attrs.instanceType || attrs['Instance Type'] || null
-
-  if (!instanceType) continue
 
   const instancePath = String(instanceType).replace(/[^a-zA-Z0-9]/g, '/')
   const fullPath = `${regionDir}/${instancePath}.json`

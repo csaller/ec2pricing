@@ -76,7 +76,7 @@ for (const regionCode of regions) {
   for (const key of Object.keys(products)) {
     const product = products[key]
     const attrs = product.attributes || {}
-    
+
     // Only create JSON files for specific instances, not instance families
     const productFamily = attrs.productFamily || product.productFamily || null
     if (productFamily !== 'Compute Instance') continue
@@ -88,6 +88,19 @@ for (const regionCode of regions) {
     // Skip if no valid instance type
     const instanceType = attrs.instanceType || attrs['Instance Type'] || null
     if (!instanceType) continue
+
+    // Only include standard On-Demand pricing (no Savings Plans, Reserved, Dedicated, etc.)
+    // Usage types can be "BoxUsage:instance" or "REGION-BoxUsage:instance" (e.g., "SAE1-BoxUsage:t3.micro")
+    const usageType = attrs.usagetype || attrs.usageType || ''
+    if (!usageType.endsWith(`BoxUsage:${instanceType}`)) continue
+
+    // Only include base Linux without pre-installed software (SQL, etc.)
+    const preInstalledSw = attrs.preInstalledSw || attrs['Pre Installed S/W'] || ''
+    if (preInstalledSw !== 'NA') continue
+
+    // Only include base operation (not SQL or other add-ons)
+    const operation = attrs.operation || ''
+    if (operation !== 'RunInstances') continue
 
     const sku =
       product.sku || attrs.instancesku || attrs.instanceSku || attrs.sku
