@@ -9,10 +9,10 @@
 
     <!-- Open Graph (Facebook, LinkedIn, WhatsApp, etc.) -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ec2pricing.com/">
+    <meta property="og:url" content="https://www.ec2pricing.com/">
     <meta property="og:title" content="EC2 Pricing - Static JSON API">
     <meta property="og:description" content="A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily. No auth, no rate limits, just curl it.">
-    <meta property="og:image" content="https://ec2pricing.com/EC2.png">
+    <meta property="og:image" content="https://www.ec2pricing.com/EC2.png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
 
@@ -20,7 +20,41 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="EC2 Pricing - Static JSON API">
     <meta name="twitter:description" content="A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily. No auth, no rate limits, just curl it.">
-    <meta name="twitter:image" content="https://ec2pricing.com/EC2.png">
+    <meta name="twitter:image" content="https://www.ec2pricing.com/EC2.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.ec2pricing.com/">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "EC2 Pricing",
+      "url": "https://www.ec2pricing.com/",
+      "description": "A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily. No auth, no rate limits, just curl it.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.ec2pricing.com/{region}/{family}/{size}.json",
+        "query-input": "required name=region name=family name=size"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebAPI",
+      "name": "EC2 Pricing API",
+      "url": "https://www.ec2pricing.com/",
+      "description": "Static JSON API for AWS EC2 Linux On-Demand instance pricing across 34 regions, updated daily.",
+      "documentation": "https://www.ec2pricing.com/",
+      "provider": {
+        "@type": "Person",
+        "name": "csaller",
+        "url": "https://github.com/csaller"
+      }
+    }
+    </script>
     <style>
         * {
             margin: 0;
@@ -323,14 +357,14 @@
             <h2>Live API</h2>
 
             <h3>Individual instance pricing</h3>
-            <div class="endpoint">https://ec2pricing.com/{region}/{family}/{size}.json</div>
+            <div class="endpoint">https://www.ec2pricing.com/{region}/{family}/{size}.json</div>
 
             <p><strong>Examples:</strong></p>
             <pre><code><span class="comment"># Get t3a.medium pricing in us-east-1</span>
-<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/us-east-1/t3a/medium.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/us-east-1/t3a/medium.json')">Copy</button></span>
+<span class="cmd-line"><span class="command">curl</span> https://www.ec2pricing.com/us-east-1/t3a/medium.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://www.ec2pricing.com/us-east-1/t3a/medium.json')">Copy</button></span>
 
 <span class="comment"># Get c7g.2xlarge pricing in eu-west-1</span>
-<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/eu-west-1/c7g/2xlarge.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/eu-west-1/c7g/2xlarge.json')">Copy</button></span></code></pre>
+<span class="cmd-line"><span class="command">curl</span> https://www.ec2pricing.com/eu-west-1/c7g/2xlarge.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://www.ec2pricing.com/eu-west-1/c7g/2xlarge.json')">Copy</button></span></code></pre>
 
             <p><strong>Response format:</strong></p>
             <pre><code>{
@@ -345,15 +379,15 @@
 }</code></pre>
 
             <h3>Family summaries</h3>
-            <div class="endpoint">https://ec2pricing.com/{region}/{family}.json</div>
+            <div class="endpoint">https://www.ec2pricing.com/{region}/{family}.json</div>
             <p>Get all instances in a family, sorted by price.</p>
 
             <p><strong>Examples:</strong></p>
             <pre><code><span class="comment"># Get all t3a instances in us-east-1</span>
-<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/us-east-1/t3a.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/us-east-1/t3a.json')">Copy</button></span>
+<span class="cmd-line"><span class="command">curl</span> https://www.ec2pricing.com/us-east-1/t3a.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://www.ec2pricing.com/us-east-1/t3a.json')">Copy</button></span>
 
 <span class="comment"># Get all m7g instances in eu-west-1</span>
-<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/eu-west-1/m7g.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/eu-west-1/m7g.json')">Copy</button></span></code></pre>
+<span class="cmd-line"><span class="command">curl</span> https://www.ec2pricing.com/eu-west-1/m7g.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://www.ec2pricing.com/eu-west-1/m7g.json')">Copy</button></span></code></pre>
 
             <p><strong>Response format:</strong></p>
             <pre><code>{
@@ -380,7 +414,7 @@
 
             <h3>Master index</h3>
             <pre><code><span class="comment"># List all regions and instance types</span>
-<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/index.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/index.json')">Copy</button></span></code></pre>
+<span class="cmd-line"><span class="command">curl</span> https://www.ec2pricing.com/index.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://www.ec2pricing.com/index.json')">Copy</button></span></code></pre>
 
             <p>Returns a full manifest of every region and instance type:</p>
             <pre><code>{
@@ -407,7 +441,7 @@
                 <div class="code-section">
                     <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
                     <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="command">getInstanceData</span>(region, family, size) {
-  <span class="keyword">const</span> url = <span class="string">`https://ec2pricing.com/${region}/${family}/${size}.json`</span>
+  <span class="keyword">const</span> url = <span class="string">`https://www.ec2pricing.com/${region}/${family}/${size}.json`</span>
   <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="command">fetch</span>(url)
   <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="command">json</span>()
   <span class="keyword">return</span> data
@@ -423,7 +457,7 @@ console.<span class="command">log</span>(<span class="string">`vCPU: ${instanceD
                 <div class="code-section">
                     <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
                     <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="command">getFamilyData</span>(region, family) {
-  <span class="keyword">const</span> url = <span class="string">`https://ec2pricing.com/${region}/${family}.json`</span>
+  <span class="keyword">const</span> url = <span class="string">`https://www.ec2pricing.com/${region}/${family}.json`</span>
   <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="command">fetch</span>(url)
   <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="command">json</span>()
   <span class="keyword">return</span> data
@@ -442,7 +476,7 @@ console.<span class="command">log</span>(<span class="string">`Instance count: $
                     <pre><code><span class="keyword">import</span> requests
 
 <span class="keyword">def</span> <span class="command">get_instance_data</span>(region, family, size):
-    url = <span class="string">f"https://ec2pricing.com/{region}/{family}/{size}.json"</span>
+    url = <span class="string">f"https://www.ec2pricing.com/{region}/{family}/{size}.json"</span>
     response = requests.<span class="command">get</span>(url)
     response.<span class="command">raise_for_status</span>()
     <span class="keyword">return</span> response.<span class="command">json</span>()
@@ -459,7 +493,7 @@ instance = <span class="command">get_instance_data</span>(<span class="string">'
                     <pre><code><span class="keyword">import</span> requests
 
 <span class="keyword">def</span> <span class="command">get_family_data</span>(region, family):
-    url = <span class="string">f"https://ec2pricing.com/{region}/{family}.json"</span>
+    url = <span class="string">f"https://www.ec2pricing.com/{region}/{family}.json"</span>
     response = requests.<span class="command">get</span>(url)
     response.<span class="command">raise_for_status</span>()
     <span class="keyword">return</span> response.<span class="command">json</span>()
