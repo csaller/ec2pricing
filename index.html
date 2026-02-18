@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EC2 Pricing - Static JSON API</title>
+    <link rel="icon" type="image/png" href="EC2.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        header {
+            border-bottom: 3px solid #232f3e;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #232f3e;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .github-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #24292e;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .github-btn:hover {
+            background: #0073bb;
+        }
+
+        .github-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #232f3e;
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin: 30px 0 15px 0;
+        }
+
+        p {
+            margin: 15px 0;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+
+        pre code {
+            background: none;
+            color: #d4d4d4;
+            padding: 0;
+        }
+
+        /* Syntax highlighting */
+        .string { color: #ce9178; }
+        .number { color: #b5cea8; }
+        .property { color: #9cdcfe; }
+        .keyword { color: #569cd6; }
+        .comment { color: #6a9955; font-style: italic; }
+        .command { color: #dcdcaa; }
+        .operator { color: #d4d4d4; }
+
+        /* Copy button styles */
+        .cmd-line {
+            position: relative;
+            display: block;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0073bb;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .cmd-line:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: #005a8c;
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        /* Code section copy styles */
+        .code-section {
+            position: relative;
+        }
+
+        .code-section .code-copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #0073bb;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .code-section:hover .code-copy-btn {
+            opacity: 1;
+        }
+
+        .code-section .code-copy-btn:hover {
+            background: #005a8c;
+        }
+
+        .code-section .code-copy-btn.copied {
+            background: #28a745;
+        }
+
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0 0 0;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #232f3e;
+            background: #f9f9f9;
+        }
+
+        .tab.active {
+            color: #232f3e;
+            border-bottom-color: #0073bb;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .endpoint {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #0073bb;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #232f3e;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .note {
+            background: #fffbf0;
+            border-left: 4px solid #ff9900;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            color: #0073bb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="https://github.com/csaller/ec2pricing" class="github-btn" target="_blank" rel="noopener">
+                <svg class="github-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                csaller/ec2pricing
+            </a>
+            <h1>EC2 Pricing</h1>
+            <p class="subtitle">A static JSON API for AWS EC2 Linux On-Demand instance pricing, updated daily.</p>
+        </header>
+
+        <section>
+            <h2>Live API</h2>
+
+            <h3>Individual instance pricing</h3>
+            <div class="endpoint">https://ec2pricing.com/{region}/{family}/{size}.json</div>
+
+            <p><strong>Examples:</strong></p>
+            <pre><code><span class="comment"># Get t3a.medium pricing in us-east-1</span>
+<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/us-east-1/t3a/medium.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/us-east-1/t3a/medium.json')">Copy</button></span>
+
+<span class="comment"># Get c7g.2xlarge pricing in eu-west-1</span>
+<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/eu-west-1/c7g/2xlarge.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/eu-west-1/c7g/2xlarge.json')">Copy</button></span></code></pre>
+
+            <p><strong>Response format:</strong></p>
+            <pre><code>{
+  <span class="property">"instanceType"</span>: <span class="string">"t3a.medium"</span>,
+  <span class="property">"instanceFamily"</span>: <span class="string">"General purpose"</span>,
+  <span class="property">"vCPU"</span>: <span class="string">"2"</span>,
+  <span class="property">"memory"</span>: <span class="string">"4 GiB"</span>,
+  <span class="property">"storage"</span>: <span class="string">"EBS only"</span>,
+  <span class="property">"networkPerformance"</span>: <span class="string">"Up to 5 Gigabit"</span>,
+  <span class="property">"operatingSystem"</span>: <span class="string">"Linux"</span>,
+  <span class="property">"price"</span>: <span class="number">0.0376</span>
+}</code></pre>
+
+            <h3>Family summaries</h3>
+            <div class="endpoint">https://ec2pricing.com/{region}/{family}.json</div>
+            <p>Get all instances in a family, sorted by price.</p>
+
+            <p><strong>Examples:</strong></p>
+            <pre><code><span class="comment"># Get all t3a instances in us-east-1</span>
+<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/us-east-1/t3a.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/us-east-1/t3a.json')">Copy</button></span>
+
+<span class="comment"># Get all m7g instances in eu-west-1</span>
+<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/eu-west-1/m7g.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/eu-west-1/m7g.json')">Copy</button></span></code></pre>
+
+            <p><strong>Response format:</strong></p>
+            <pre><code>{
+  <span class="property">"family"</span>: <span class="string">"t3a"</span>,
+  <span class="property">"region"</span>: <span class="string">"us-east-1"</span>,
+  <span class="property">"instances"</span>: [
+    {
+      <span class="property">"instanceType"</span>: <span class="string">"t3a.nano"</span>,
+      <span class="property">"instanceFamily"</span>: <span class="string">"General purpose"</span>,
+      <span class="property">"vCPU"</span>: <span class="string">"2"</span>,
+      <span class="property">"memory"</span>: <span class="string">"0.5 GiB"</span>,
+      <span class="property">"storage"</span>: <span class="string">"EBS only"</span>,
+      <span class="property">"networkPerformance"</span>: <span class="string">"Up to 5 Gigabit"</span>,
+      <span class="property">"operatingSystem"</span>: <span class="string">"Linux"</span>,
+      <span class="property">"price"</span>: <span class="number">0.0047</span>
+    }
+    <span class="comment">// ... all instances in family, sorted by price</span>
+  ]
+}</code></pre>
+
+            <div class="note">
+                All <code>price</code> values are hourly On-Demand rates in USD.
+            </div>
+
+            <h3>Master index</h3>
+            <pre><code><span class="comment"># List all regions and instance types</span>
+<span class="cmd-line"><span class="command">curl</span> https://ec2pricing.com/index.json<button class="copy-btn" onclick="copyCommand(this, 'curl https://ec2pricing.com/index.json')">Copy</button></span></code></pre>
+
+            <p>Returns a full manifest of every region and instance type:</p>
+            <pre><code>{
+  <span class="property">"updatedAt"</span>: <span class="string">"2026-02-17T06:00:00.000Z"</span>,
+  <span class="property">"regions"</span>: {
+    <span class="property">"us-east-1"</span>: {
+      <span class="property">"instanceTypes"</span>: [<span class="string">"c5.xlarge"</span>, <span class="string">"m5.large"</span>, <span class="string">"t3.micro"</span>, <span class="string">"..."</span>]
+    }
+  }
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>Usage Examples</h2>
+            <p>Examples of fetching EC2 pricing data from the API in different programming languages:</p>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(event, 'javascript')">JavaScript</button>
+                <button class="tab" onclick="switchTab(event, 'python')">Python</button>
+            </div>
+
+            <div id="javascript" class="tab-content active">
+                <p><strong>Fetch data from a single instance:</strong></p>
+                <div class="code-section">
+                    <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
+                    <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="command">getInstanceData</span>(region, family, size) {
+  <span class="keyword">const</span> url = <span class="string">`https://ec2pricing.com/${region}/${family}/${size}.json`</span>
+  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="command">fetch</span>(url)
+  <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="command">json</span>()
+  <span class="keyword">return</span> data
+}
+
+<span class="keyword">const</span> instanceData = <span class="keyword">await</span> <span class="command">getInstanceData</span>(<span class="string">'us-east-1'</span>, <span class="string">'t3a'</span>, <span class="string">'medium'</span>)
+console.<span class="command">log</span>(<span class="string">`Instance: ${instanceData.instanceType}`</span>)
+console.<span class="command">log</span>(<span class="string">`Price: $${instanceData.price}/hour`</span>)
+console.<span class="command">log</span>(<span class="string">`vCPU: ${instanceData.vCPU}, Memory: ${instance.memory}`</span>)</code></pre>
+                </div>
+
+                <p><strong>Fetch data from all instances on a family:</strong></p>
+                <div class="code-section">
+                    <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
+                    <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="command">getFamilyData</span>(region, family) {
+  <span class="keyword">const</span> url = <span class="string">`https://ec2pricing.com/${region}/${family}.json`</span>
+  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="command">fetch</span>(url)
+  <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="command">json</span>()
+  <span class="keyword">return</span> data
+}
+
+<span class="keyword">const</span> familyData = <span class="keyword">await</span> <span class="command">getFamilyData</span>(<span class="string">'us-east-1'</span>, <span class="string">'t3a'</span>)
+console.<span class="command">log</span>(<span class="string">`Family: ${familyData.family}`</span>)
+console.<span class="command">log</span>(<span class="string">`Instance count: ${familyData.instances.length}`</span>)</code></pre>
+                </div>
+            </div>
+
+            <div id="python" class="tab-content">
+                <div class="code-section">
+                    <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
+                    <p><strong>Fetch data from a single instance:</strong></p>
+                    <pre><code><span class="keyword">import</span> requests
+
+<span class="keyword">def</span> <span class="command">get_instance_data</span>(region, family, size):
+    url = <span class="string">f"https://ec2pricing.com/{region}/{family}/{size}.json"</span>
+    response = requests.<span class="command">get</span>(url)
+    response.<span class="command">raise_for_status</span>()
+    <span class="keyword">return</span> response.<span class="command">json</span>()
+
+instance = <span class="command">get_instance_data</span>(<span class="string">'us-east-1'</span>, <span class="string">'t3a'</span>, <span class="string">'medium'</span>)
+<span class="command">print</span>(<span class="string">f"Instance: {instance['instanceType']}"</span>)
+<span class="command">print</span>(<span class="string">f"Price: ${instance['price']}/hour"</span>)
+<span class="command">print</span>(<span class="string">f"vCPU: {instance['vCPU']}, Memory: {instance['memory']}"</span>)</code></pre>
+                </div>
+
+                <p><strong>Fetch data from all instances on a family:</strong></p>
+                <div class="code-section">
+                    <button class="code-copy-btn" onclick="copyCodeSection(this)">Copy</button>
+                    <pre><code><span class="keyword">import</span> requests
+
+<span class="keyword">def</span> <span class="command">get_family_data</span>(region, family):
+    url = <span class="string">f"https://ec2pricing.com/{region}/{family}.json"</span>
+    response = requests.<span class="command">get</span>(url)
+    response.<span class="command">raise_for_status</span>()
+    <span class="keyword">return</span> response.<span class="command">json</span>()
+
+family_data = <span class="command">get_family_data</span>(<span class="string">'us-east-1'</span>, <span class="string">'t3a'</span>)
+<span class="command">print</span>(<span class="string">f"Family: {family_data['family']}"</span>)
+<span class="command">print</span>(<span class="string">f"Instance count: {len(family_data['instances'])}"</span>)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Supported regions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Americas</th>
+                        <th>Europe</th>
+                        <th>Asia Pacific</th>
+                        <th>Middle East & Africa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>us-east-1</td>
+                        <td>eu-central-1</td>
+                        <td>ap-east-1</td>
+                        <td>af-south-1</td>
+                    </tr>
+                    <tr>
+                        <td>us-east-2</td>
+                        <td>eu-central-2</td>
+                        <td>ap-east-2</td>
+                        <td>il-central-1</td>
+                    </tr>
+                    <tr>
+                        <td>us-west-1</td>
+                        <td>eu-north-1</td>
+                        <td>ap-northeast-1</td>
+                        <td>me-central-1</td>
+                    </tr>
+                    <tr>
+                        <td>us-west-2</td>
+                        <td>eu-south-1</td>
+                        <td>ap-northeast-2</td>
+                        <td>me-south-1</td>
+                    </tr>
+                    <tr>
+                        <td>ca-central-1</td>
+                        <td>eu-south-2</td>
+                        <td>ap-northeast-3</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>ca-west-1</td>
+                        <td>eu-west-1</td>
+                        <td>ap-south-1</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>mx-central-1</td>
+                        <td>eu-west-2</td>
+                        <td>ap-south-2</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>sa-east-1</td>
+                        <td>eu-west-3</td>
+                        <td>ap-southeast-1</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-2</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-3</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-4</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-5</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-6</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>ap-southeast-7</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Data source</h2>
+            <p>Pricing data is fetched directly from the official AWS EC2 Pricing API.</p>
+
+            <p><strong>Filtering:</strong></p>
+            <ul>
+                <li>Only <strong>Linux On-Demand</strong> pricing is included</li>
+                <li>Standard <code>BoxUsage</code> instances only (no Reserved, Savings Plans, Dedicated, or Spot)</li>
+                <li>Base Linux without pre-installed software (SQL, etc.)</li>
+                <li>No Windows, RHEL, SUSE, or other operating systems</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p><strong>License:</strong> MIT</p>
+            <p>Data updated daily from AWS EC2 Pricing API</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCommand(button, text) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        function copyCodeSection(button) {
+            // Find the code element within the same code-section
+            const codeSection = button.closest('.code-section');
+            const codeElement = codeSection.querySelector('code');
+            const text = codeElement.textContent;
+
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        function switchTab(event, tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Add active class to clicked tab
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

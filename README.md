@@ -139,12 +139,6 @@ A [GitHub Actions workflow](.github/workflows/update-pricing.yml) runs daily and
 
 Requires [Bun](https://bun.sh).
 
-### Process all regions
-
-```bash
-bun index.js
-```
-
 ### Process a single region
 
 ```bash
@@ -168,7 +162,6 @@ bun generate-index.js instances
 
 ```
 .
-├── index.js                 # Process all regions sequentially (local use)
 ├── process-region.js        # Process a single region (used by CI)
 ├── generate-index.js        # Generate index.json from processed data
 ├── .github/workflows/
