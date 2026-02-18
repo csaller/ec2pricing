@@ -104,6 +104,9 @@ jobs:
       - name: Generate index.json
         run: bun generate-index.js site
 
+      - name: Copy index.html
+        run: cp index.html site/
+
       - name: Prepare for Pages
         run: touch site/.nojekyll
 
