@@ -23,14 +23,14 @@ jobs:
         run: cd static && bun install && bun run build
 
       - name: Deploy to surge.sh
-        run: bunx surge static/dist pr-${{ github.event.pull_request.number }}.dev.ec2pricing.com --token ${{ secrets.SURGE_TOKEN }}
+        run: bunx surge static/dist ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
 
       - name: Comment preview URL
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            **Preview deployed** to https://pr-${{ github.event.pull_request.number }}.dev.ec2pricing.com
+            **Preview deployed** to https://ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh
           comment-tag: pr-preview
 
   teardown:
@@ -40,4 +40,4 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - name: Teardown surge.sh preview
-        run: bunx surge teardown pr-${{ github.event.pull_request.number }}.dev.ec2pricing.com --token ${{ secrets.SURGE_TOKEN }}
+        run: bunx surge teardown ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
