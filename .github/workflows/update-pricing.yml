@@ -100,8 +100,11 @@ jobs:
       - name: Generate index.json
         run: bun generate-index.js site
 
-      - name: Copy static files
-        run: cp static/* site/
+      - name: Build static site
+        run: cd static && bun install && bun run build
+
+      - name: Copy static site to deploy directory
+        run: cp -r static/dist/* site/
 
       - name: Prepare for Pages
         run: touch site/.nojekyll

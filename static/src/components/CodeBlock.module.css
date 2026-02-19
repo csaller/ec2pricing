@@ -1,0 +1,98 @@
+.codeSection {
+  position: relative;
+  margin: 16px 0;
+}
+
+.codeSection pre {
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  line-height: 1.55;
+  border: 1px solid var(--color-border);
+  transition: border-color 0.3s ease;
+}
+
+.codeSection:hover pre {
+  border-color: rgba(0, 212, 255, 0.1);
+}
+
+.codeSection pre code {
+  background: none;
+  color: var(--color-code-text);
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  border: none;
+}
+
+.copyBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.codeSection:hover .copyBtn {
+  opacity: 1;
+}
+
+.copyBtn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-bright);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.copied {
+  background: rgba(74, 222, 128, 0.15) !important;
+  color: var(--color-success) !important;
+  border-color: rgba(74, 222, 128, 0.3) !important;
+}
+
+.cmdLine {
+  position: relative;
+  display: block;
+  padding-right: 70px;
+}
+
+.command {
+  color: var(--color-accent);
+}
+
+.inlineCopyBtn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.cmdLine:hover .inlineCopyBtn {
+  opacity: 1;
+}
+
+.inlineCopyBtn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-bright);
+}

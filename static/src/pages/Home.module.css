@@ -1,0 +1,108 @@
+/* Syntax highlighting — tuned for dark navy */
+.string { color: #f0a875; }
+.number { color: #b5cea8; }
+.property { color: #7dd3fc; }
+.keyword { color: #c4b5fd; }
+.comment { color: #4b6a4f; font-style: italic; }
+.fn { color: #93e8b0; }
+
+.section {
+  padding: 48px 0;
+  position: relative;
+  animation: fadeUp 0.6s ease both;
+}
+
+.section:nth-child(1) { animation-delay: 0.1s; }
+.section:nth-child(2) { animation-delay: 0.2s; }
+.section:nth-child(3) { animation-delay: 0.3s; }
+.section:nth-child(4) { animation-delay: 0.4s; }
+
+.section + .section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -28px;
+  right: -28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+}
+
+.sectionTitle {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--color-text-bright);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.sectionSubtitle {
+  font-size: 0.95em;
+  color: var(--color-text-muted);
+  margin-bottom: 32px;
+}
+
+.h3 {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 36px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.p {
+  margin: 12px 0;
+  color: var(--color-text);
+}
+
+.strong {
+  color: var(--color-text-bright);
+  font-weight: 600;
+}
+
+.endpoint {
+  background: var(--color-surface);
+  padding: 14px 20px;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 16px 0;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--color-text);
+  overflow-x: auto;
+}
+
+.note {
+  background: rgba(255, 178, 36, 0.06);
+  border: 1px solid rgba(255, 178, 36, 0.12);
+  border-left: 3px solid var(--color-warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 20px;
+  margin: 20px 0;
+  font-size: 0.9em;
+  color: var(--color-text);
+}
+
+.footer {
+  margin-top: 0;
+  padding: 40px 0;
+  position: relative;
+  animation: fadeUp 0.6s ease 0.5s both;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85em;
+  color: var(--color-text-muted);
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -28px;
+  right: -28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+}

@@ -1,0 +1,77 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Remove existing surge.sh preview
+        continue-on-error: true
+        run: bunx surge teardown ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+
+      - name: Resolve latest successful Update EC2 Pricing run
+        id: latest-pricing-run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run_id=$(gh api \
+            repos/${{ github.repository }}/actions/workflows/update-pricing.yml/runs \
+            --jq '.workflow_runs[0].id')
+
+          if [ -z "$run_id" ] || [ "$run_id" = "null" ]; then
+            echo "No successful runs found for update-pricing.yml on main"
+            exit 1
+          fi
+
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+
+      - name: Download latest github-pages artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.latest-pricing-run.outputs.run_id }}
+          name: github-pages
+          path: /tmp/github-pages-artifact
+
+      - name: Build static site
+        run: cd static && bun install && bun run build
+
+      - name: Merge latest pricing site artifact into static dist
+        run: |
+          tar -xf /tmp/github-pages-artifact/artifact.tar -C static/dist
+
+      - name: Deploy to surge.sh
+        run: bunx surge static/dist ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+
+      - name: Comment preview URL
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Preview deployed** to https://ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh
+
+  teardown:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Teardown surge.sh preview
+        run: bunx surge teardown ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
