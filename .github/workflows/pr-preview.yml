@@ -21,10 +21,6 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      - name: Remove existing surge.sh preview
-        continue-on-error: true
-        run: bunx surge teardown ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
-
       - name: Resolve latest successful Update EC2 Pricing run
         id: latest-pricing-run
         env:
