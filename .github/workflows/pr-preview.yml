@@ -53,9 +53,11 @@ jobs:
       - name: Build static site
         run: cd static && bun install && bun run build
 
-      - name: Merge latest pricing site artifact into static dist
+      - name: Merge latest pricing data into static dist
         run: |
-          tar -xf /tmp/github-pages-artifact/artifact.tar -C static/dist
+          mkdir -p /tmp/pricing-data
+          tar -xf /tmp/github-pages-artifact/artifact.tar -C /tmp/pricing-data
+          cp -r /tmp/pricing-data/index.json /tmp/pricing-data/us-east-1 /tmp/pricing-data/eu-west-1 static/dist/
 
       - name: Deploy to surge.sh
         run: bunx surge static/dist ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh --token ${{ secrets.SURGE_TOKEN }}
@@ -66,6 +68,8 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Preview deployed** to https://ec2pricing-pr-${{ github.event.pull_request.number }}.surge.sh
+
+            > Note: Only `us-east-1` and `eu-west-1` pricing data is included in the preview.
 
   teardown:
     if: github.event.action == 'closed'
