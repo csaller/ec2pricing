@@ -96,3 +96,25 @@
   background: var(--color-surface-hover);
   color: var(--color-text-bright);
 }
+
+@media (max-width: 768px) {
+  .codeSection pre {
+    padding: 14px 16px;
+  }
+
+  .codeSection pre code {
+    font-size: 0.78em;
+  }
+
+  .copyBtn {
+    opacity: 1;
+  }
+
+  .cmdLine {
+    padding-right: 60px;
+  }
+
+  .inlineCopyBtn {
+    opacity: 1;
+  }
+}

@@ -66,9 +66,14 @@ body::before {
   position: relative;
   z-index: 1;
   max-width: 1000px;
+  min-width: 480px;
   margin: 0 auto;
   padding: 0 28px 60px;
   min-height: 100vh;
+}
+
+ul, ol {
+  padding-left: 1.5em;
 }
 
 a {
@@ -94,5 +99,11 @@ a:hover {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 32px 40px;
   }
 }

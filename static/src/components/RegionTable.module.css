@@ -46,3 +46,10 @@
 .region:hover {
   color: var(--color-accent);
 }
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
