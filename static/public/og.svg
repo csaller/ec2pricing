@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap');
+    </style>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060a14"/>
+      <stop offset="100%" stop-color="#0c1120"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="rgba(0,212,255,0.06)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Radial glow -->
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Grid texture -->
+  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+    <line x1="60" y1="0" x2="60" y2="60" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+    <line x1="0" y1="60" x2="60" y2="60" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Accent line top -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#accentGrad)" opacity="0.6"/>
+
+  <!-- Code block background -->
+  <rect x="600" y="160" width="500" height="300" rx="10" fill="#0a0f1e" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Terminal dots -->
+  <circle cx="625" cy="184" r="5" fill="#ff6b6b"/>
+  <circle cx="643" cy="184" r="5" fill="#ffb224"/>
+  <circle cx="661" cy="184" r="5" fill="#4ade80"/>
+
+  <!-- Code content -->
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="224">
+    <tspan x="630" fill="#6b7a99">$ curl ec2pricing.com/us-east-1/t3a/medium.json</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="260">
+    <tspan x="630" fill="#6b7a99">{</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="284">
+    <tspan x="654" fill="#7dd3fc">"instanceType"</tspan><tspan fill="#6b7a99">: </tspan><tspan fill="#4ade80">"t3a.medium"</tspan><tspan fill="#6b7a99">,</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="308">
+    <tspan x="654" fill="#7dd3fc">"vCPU"</tspan><tspan fill="#6b7a99">: </tspan><tspan fill="#4ade80">"2"</tspan><tspan fill="#6b7a99">,</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="332">
+    <tspan x="654" fill="#7dd3fc">"memory"</tspan><tspan fill="#6b7a99">: </tspan><tspan fill="#4ade80">"4 GiB"</tspan><tspan fill="#6b7a99">,</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="356">
+    <tspan x="654" fill="#7dd3fc">"price"</tspan><tspan fill="#6b7a99">: </tspan><tspan fill="#00d4ff">0.0376</tspan>
+  </text>
+  <text font-family="'IBM Plex Mono', monospace" font-size="15" y="380">
+    <tspan x="630" fill="#6b7a99">}</tspan>
+  </text>
+
+  <!-- Title area -->
+  <text font-family="'DM Sans', sans-serif" font-weight="700" font-size="56" x="100" y="240" fill="#f1f5f9">EC2 </text>
+  <text font-family="'DM Sans', sans-serif" font-weight="700" font-size="56" x="215" y="240" fill="#00d4ff">Pricing</text>
+
+  <!-- Subtitle -->
+  <text font-family="'DM Sans', sans-serif" font-weight="400" font-size="22" x="100" y="285" fill="#6b7a99">Static JSON API</text>
+
+  <!-- Description -->
+  <text font-family="'DM Sans', sans-serif" font-weight="400" font-size="17" fill="#c8d1e0">
+    <tspan x="100" y="340">AWS EC2 Linux On-Demand pricing</tspan>
+    <tspan x="100" y="366">across 34 regions, updated daily.</tspan>
+  </text>
+
+  <!-- Tagline pill -->
+  <rect x="100" y="400" width="370" height="36" rx="18" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+  <text font-family="'IBM Plex Mono', monospace" font-weight="500" font-size="14" x="124" y="423" fill="#00d4ff">No auth · No rate limits · Just curl it</text>
+
+  <!-- Domain -->
+  <text font-family="'IBM Plex Mono', monospace" font-weight="500" font-size="16" x="100" y="560" fill="#6b7a99">ec2pricing.com</text>
+
+  <!-- Accent line bottom -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#accentGrad)" opacity="0.4"/>
+</svg>
