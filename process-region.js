@@ -61,8 +61,10 @@ for (const key of Object.keys(products)) {
 
   // Only include standard On-Demand pricing (no Savings Plans, Reserved, Dedicated, etc.)
   // Usage types can be "BoxUsage:instance" or "REGION-BoxUsage:instance" (e.g., "SAE1-BoxUsage:t3.micro")
+  // Exclude HostBoxUsage (Dedicated Host tenancy) which has $0 pricing
   const usageType = attrs.usagetype || attrs.usageType || ''
   if (!usageType.endsWith(`BoxUsage:${instanceType}`)) continue
+  if (usageType.includes('HostBoxUsage')) continue
 
   // Only include base Linux without pre-installed software (SQL, etc.)
   const preInstalledSw = attrs.preInstalledSw || attrs['Pre Installed S/W'] || ''
