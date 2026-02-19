@@ -36,3 +36,17 @@
 .tabContent {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    font-size: 0.78em;
+    white-space: nowrap;
+  }
+}

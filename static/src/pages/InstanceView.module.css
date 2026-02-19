@@ -120,3 +120,31 @@
   color: var(--color-inline-code-text);
   border: 1px solid rgba(0, 212, 255, 0.06);
 }
+
+@media (max-width: 768px) {
+  .container h2 {
+    font-size: 1.6em;
+  }
+
+  .table td:first-child {
+    width: 120px;
+    font-size: 0.78em;
+    padding: 10px 12px;
+  }
+
+  .table td:last-child {
+    padding: 10px 12px;
+    font-size: 0.9em;
+  }
+
+  .price {
+    font-size: 1.1em;
+  }
+
+  .apiLink {
+    padding: 10px 14px;
+    font-size: 0.78em;
+    overflow-wrap: break-word;
+    word-break: break-all;
+  }
+}

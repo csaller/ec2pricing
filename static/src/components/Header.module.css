@@ -131,3 +131,26 @@
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
 }
+
+@media (max-width: 768px) {
+  .header {
+    padding: 28px 0 28px;
+  }
+
+  .topBar {
+    margin-bottom: 20px;
+  }
+
+  .logoText {
+    font-size: 0.85em;
+  }
+
+  .title {
+    font-size: 2em;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 1em;
+  }
+}
