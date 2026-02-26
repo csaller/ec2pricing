@@ -12,16 +12,16 @@ export default function Home() {
 
         <h3 class={styles.h3}>Individual instance pricing</h3>
         <div class={styles.endpoint}>
-          https://www.ec2pricing.com/{"{region}"}/{"{family}"}/{"{size}"}.json
+          https://ec2pricing.com/{"{region}"}/{"{family}"}/{"{size}"}.json
         </div>
 
         <p class={styles.p}><span class={styles.strong}>Examples</span></p>
         <CodeBlock>
           <span class={styles.comment}># Get t3a.medium pricing in us-east-1</span>{"\n"}
-          <CmdLine command="curl" text="curl https://www.ec2pricing.com/us-east-1/t3a/medium.json" />{"\n"}
+          <CmdLine command="curl" text="curl https://ec2pricing.com/us-east-1/t3a/medium.json" />{"\n"}
           {"\n"}
           <span class={styles.comment}># Get c7g.2xlarge pricing in eu-west-1</span>{"\n"}
-          <CmdLine command="curl" text="curl https://www.ec2pricing.com/eu-west-1/c7g/2xlarge.json" />
+          <CmdLine command="curl" text="curl https://ec2pricing.com/eu-west-1/c7g/2xlarge.json" />
         </CodeBlock>
 
         <p class={styles.p}><span class={styles.strong}>Response</span></p>
@@ -49,17 +49,17 @@ export default function Home() {
 
         <h3 class={styles.h3}>Family summaries</h3>
         <div class={styles.endpoint}>
-          https://www.ec2pricing.com/{"{region}"}/{"{family}"}.json
+          https://ec2pricing.com/{"{region}"}/{"{family}"}.json
         </div>
         <p class={styles.p}>Get all instances in a family, sorted by price.</p>
 
         <p class={styles.p}><span class={styles.strong}>Examples</span></p>
         <CodeBlock>
           <span class={styles.comment}># Get all t3a instances in us-east-1</span>{"\n"}
-          <CmdLine command="curl" text="curl https://www.ec2pricing.com/us-east-1/t3a.json" />{"\n"}
+          <CmdLine command="curl" text="curl https://ec2pricing.com/us-east-1/t3a.json" />{"\n"}
           {"\n"}
           <span class={styles.comment}># Get all m7g instances in eu-west-1</span>{"\n"}
-          <CmdLine command="curl" text="curl https://www.ec2pricing.com/eu-west-1/m7g.json" />
+          <CmdLine command="curl" text="curl https://ec2pricing.com/eu-west-1/m7g.json" />
         </CodeBlock>
 
         <p class={styles.p}><span class={styles.strong}>Response</span></p>
@@ -105,7 +105,7 @@ export default function Home() {
         <h3 class={styles.h3}>Master index</h3>
         <CodeBlock>
           <span class={styles.comment}># List all regions and instance types</span>{"\n"}
-          <CmdLine command="curl" text="curl https://www.ec2pricing.com/index.json" />
+          <CmdLine command="curl" text="curl https://ec2pricing.com/index.json" />
         </CodeBlock>
 
         <p class={styles.p}>Returns a full manifest of every region and instance type:</p>
@@ -141,7 +141,7 @@ export default function Home() {
                 <>
                   <p class={styles.p}><span class={styles.strong}>Fetch a single instance</span></p>
                   <CodeBlock copyText={`async function getInstanceData(region, family, size) {
-  const url = \`https://www.ec2pricing.com/\${region}/\${family}/\${size}.json\`
+  const url = \`https://ec2pricing.com/\${region}/\${family}/\${size}.json\`
   const response = await fetch(url)
   const data = await response.json()
   return data
@@ -152,7 +152,7 @@ console.log(\`Instance: \${instanceData.instanceType}\`)
 console.log(\`Price: $\${instanceData.price}/hour\`)
 console.log(\`vCPU: \${instanceData.vCPU}, Memory: \${instanceData.memory}\`)`}>
                     <span class={styles.keyword}>async</span> <span class={styles.keyword}>function</span> <span class={styles.fn}>getInstanceData</span>(region, family, size) {`{`}{"\n"}
-                    {"  "}<span class={styles.keyword}>const</span> url = <span class={styles.string}>{"`"}https://www.ec2pricing.com/${"${region}"}/${"${family}"}/${"${size}"}.json{"`"}</span>{"\n"}
+                    {"  "}<span class={styles.keyword}>const</span> url = <span class={styles.string}>{"`"}https://ec2pricing.com/${"${region}"}/${"${family}"}/${"${size}"}.json{"`"}</span>{"\n"}
                     {"  "}<span class={styles.keyword}>const</span> response = <span class={styles.keyword}>await</span> <span class={styles.fn}>fetch</span>(url){"\n"}
                     {"  "}<span class={styles.keyword}>const</span> data = <span class={styles.keyword}>await</span> response.<span class={styles.fn}>json</span>(){"\n"}
                     {"  "}<span class={styles.keyword}>return</span> data{"\n"}
@@ -166,7 +166,7 @@ console.log(\`vCPU: \${instanceData.vCPU}, Memory: \${instanceData.memory}\`)`}>
 
                   <p class={styles.p}><span class={styles.strong}>Fetch an entire family</span></p>
                   <CodeBlock copyText={`async function getFamilyData(region, family) {
-  const url = \`https://www.ec2pricing.com/\${region}/\${family}.json\`
+  const url = \`https://ec2pricing.com/\${region}/\${family}.json\`
   const response = await fetch(url)
   const data = await response.json()
   return data
@@ -176,7 +176,7 @@ const familyData = await getFamilyData('us-east-1', 't3a')
 console.log(\`Family: \${familyData.family}\`)
 console.log(\`Instance count: \${familyData.instances.length}\`)`}>
                     <span class={styles.keyword}>async</span> <span class={styles.keyword}>function</span> <span class={styles.fn}>getFamilyData</span>(region, family) {`{`}{"\n"}
-                    {"  "}<span class={styles.keyword}>const</span> url = <span class={styles.string}>{"`"}https://www.ec2pricing.com/${"${region}"}/${"${family}"}.json{"`"}</span>{"\n"}
+                    {"  "}<span class={styles.keyword}>const</span> url = <span class={styles.string}>{"`"}https://ec2pricing.com/${"${region}"}/${"${family}"}.json{"`"}</span>{"\n"}
                     {"  "}<span class={styles.keyword}>const</span> response = <span class={styles.keyword}>await</span> <span class={styles.fn}>fetch</span>(url){"\n"}
                     {"  "}<span class={styles.keyword}>const</span> data = <span class={styles.keyword}>await</span> response.<span class={styles.fn}>json</span>(){"\n"}
                     {"  "}<span class={styles.keyword}>return</span> data{"\n"}
@@ -195,12 +195,12 @@ console.log(\`Instance count: \${familyData.instances.length}\`)`}>
               content: () => (
                 <>
                   <p class={styles.p}><span class={styles.strong}>Fetch a single instance</span></p>
-                  <CodeBlock copyText={"import requests\n\ndef get_instance_data(region, family, size):\n    url = f\"https://www.ec2pricing.com/{region}/{family}/{size}.json\"\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\ninstance = get_instance_data('us-east-1', 't3a', 'medium')\nprint(f\"Instance: {instance['instanceType']}\")\nprint(f\"Price: ${instance['price']}/hour\")\nprint(f\"vCPU: {instance['vCPU']}, Memory: {instance['memory']}\")"}>
+                  <CodeBlock copyText={"import requests\n\ndef get_instance_data(region, family, size):\n    url = f\"https://ec2pricing.com/{region}/{family}/{size}.json\"\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\ninstance = get_instance_data('us-east-1', 't3a', 'medium')\nprint(f\"Instance: {instance['instanceType']}\")\nprint(f\"Price: ${instance['price']}/hour\")\nprint(f\"vCPU: {instance['vCPU']}, Memory: {instance['memory']}\")"}>
 
                     <span class={styles.keyword}>import</span> requests{"\n"}
                     {"\n"}
                     <span class={styles.keyword}>def</span> <span class={styles.fn}>get_instance_data</span>(region, family, size):{"\n"}
-                    {"    "}url = <span class={styles.string}>f"https://www.ec2pricing.com/{"{region}"}/{"{family}"}/{"{size}"}.json"</span>{"\n"}
+                    {"    "}url = <span class={styles.string}>f"https://ec2pricing.com/{"{region}"}/{"{family}"}/{"{size}"}.json"</span>{"\n"}
                     {"    "}response = requests.<span class={styles.fn}>get</span>(url){"\n"}
                     {"    "}response.<span class={styles.fn}>raise_for_status</span>(){"\n"}
                     {"    "}<span class={styles.keyword}>return</span> response.<span class={styles.fn}>json</span>(){"\n"}
@@ -212,12 +212,12 @@ console.log(\`Instance count: \${familyData.instances.length}\`)`}>
                   </CodeBlock>
 
                   <p class={styles.p}><span class={styles.strong}>Fetch an entire family</span></p>
-                  <CodeBlock copyText={"import requests\n\ndef get_family_data(region, family):\n    url = f\"https://www.ec2pricing.com/{region}/{family}.json\"\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\nfamily_data = get_family_data('us-east-1', 't3a')\nprint(f\"Family: {family_data['family']}\")\nprint(f\"Instance count: {len(family_data['instances'])}\")"}>
+                  <CodeBlock copyText={"import requests\n\ndef get_family_data(region, family):\n    url = f\"https://ec2pricing.com/{region}/{family}.json\"\n    response = requests.get(url)\n    response.raise_for_status()\n    return response.json()\n\nfamily_data = get_family_data('us-east-1', 't3a')\nprint(f\"Family: {family_data['family']}\")\nprint(f\"Instance count: {len(family_data['instances'])}\")"}>
 
                     <span class={styles.keyword}>import</span> requests{"\n"}
                     {"\n"}
                     <span class={styles.keyword}>def</span> <span class={styles.fn}>get_family_data</span>(region, family):{"\n"}
-                    {"    "}url = <span class={styles.string}>f"https://www.ec2pricing.com/{"{region}"}/{"{family}"}.json"</span>{"\n"}
+                    {"    "}url = <span class={styles.string}>f"https://ec2pricing.com/{"{region}"}/{"{family}"}.json"</span>{"\n"}
                     {"    "}response = requests.<span class={styles.fn}>get</span>(url){"\n"}
                     {"    "}response.<span class={styles.fn}>raise_for_status</span>(){"\n"}
                     {"    "}<span class={styles.keyword}>return</span> response.<span class={styles.fn}>json</span>(){"\n"}

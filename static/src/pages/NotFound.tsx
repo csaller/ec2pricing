@@ -13,11 +13,11 @@ export default function NotFound() {
         <A href="/">View API documentation</A>
       </p>
       <div class={styles.examples}>
-        curl https://www.ec2pricing.com/us-east-1/t3a/medium.json
+        curl https://ec2pricing.com/us-east-1/t3a/medium.json
         <br />
-        curl https://www.ec2pricing.com/eu-west-1/c7g.json
+        curl https://ec2pricing.com/eu-west-1/c7g.json
         <br />
-        curl https://www.ec2pricing.com/index.json
+        curl https://ec2pricing.com/index.json
       </div>
     </div>
   );
